@@ -18,7 +18,7 @@ public class RainfallAnalyser {
 
     private static String generateSavePath(String path) {
         var pathElements = path.trim().split("/");
-        var filenameElements = pathElements[3].trim().split("\\.");
+        var filenameElements = pathElements[2].trim().split("\\.");
         return String.format("%s/%s_analysed.%s", pathElements[0],
                 filenameElements[0], filenameElements[1]);
     }
