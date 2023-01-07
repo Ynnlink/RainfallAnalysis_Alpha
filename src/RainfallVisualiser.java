@@ -91,7 +91,7 @@ public class RainfallVisualiser extends Application {
 
         TextIO.getln(); // ignore the header line
 
-        var year = new ArrayList<String>();
+        var years = new ArrayList<String>();
 
         //defining the axes
         CategoryAxis xAxis = new CategoryAxis();
@@ -138,58 +138,83 @@ public class RainfallVisualiser extends Application {
         while (!TextIO.eof()) {
             var record = TextIO.getln().trim().split(",");
 
-            //axis year
-            if (!year.contains(record[0])) {
-                year.add(record[0]);
-            }
 
-            //axis data
+            var year = record[0];
+            var month = record[1];
             var monthlyTotal = Double.parseDouble(record[2]);
 
-            //fill in data according to month
-            switch (record[1]) {
-                case "1":
-                    series1.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "2":
-                    series2.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "3":
-                    series3.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "4":
-                    series4.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "5":
-                    series5.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "6":
-                    series6.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "7":
-                    series7.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "8":
-                    series8.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "9":
-                    series9.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "10":
-                    series10.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "11":
-                    series11.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-                case "12":
-                    series12.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+            //axis year
+            if (!years.contains(year)) {
+                years.add(year);
             }
+
+            //fill in data according to month
+
+            switch (month) {
+                case "1":
+                    series1.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "2":
+                    series2.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "3":
+                    series3.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "4":
+                    series4.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "5":
+                    series5.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "6":
+                    series6.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "7":
+                    series7.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "8":
+                    series8.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "9":
+                    series9.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "10":
+                    series10.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "11":
+                    series11.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+                case "12":
+                    series12.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                    continue;
+            }
+
+
+
+
+
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            series.setName(month);
+            series.getData().add(new XYChart.Data<>(year, monthlyTotal));
+
+            //barChart.getData().add(series);
 
         }
 
 
 
         //fill in categories
-        xAxis.setCategories(FXCollections.observableArrayList(year));
+        xAxis.setCategories(FXCollections.observableArrayList(years));
 
         //fill in data
         barChart.getData().addAll(series1,series2,series3,series4,series5,series6,series7,series8,series9,series10,series11,series12);
 
 
         //barChart.setBarGap(5);
-        barChart.setCategoryGap(20);
+        //barChart.setCategoryGap(20);
 
         //barChart.setMinWidth(0);
-        barChart.setMaxWidth(1500);
+        //barChart.setMaxWidth(1500);
 
 
         //Group root = new Group(barChart);
