@@ -2,21 +2,20 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.Group;
 import javafx.stage.Stage;
 import textio.TextIO;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Scanner;
+
+import static javafx.application.Platform.exit;
 
 /**
  * This file can be used to draw a chart that effectively represents rainfall data.  Just fill in
@@ -102,9 +101,18 @@ public class RainfallVisualiser extends Application {
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Units = mm");
 
-        //creating the Bar chart
+        //creating the bar chart
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setTitle("Rainfall Visualiser");
+
+        //define bar chart title
+        try {
+            var pathElements = TextIO.getInputFileName().trim().split("/");
+            var filenameElements = pathElements[1].trim().split("\\.");
+            var stationName = filenameElements[0].trim().split("_");
+            barChart.setTitle(stationName[0] + " Rainfall Analysis");
+        } catch (Exception e) {
+            System.out.println("File name error!");
+        }
 
         //creating data series using months
         //Jan Feb Mar Apr May June July Aug Sept Oct Nov Dec
@@ -138,7 +146,7 @@ public class RainfallVisualiser extends Application {
         while (!TextIO.eof()) {
             var record = TextIO.getln().trim().split(",");
 
-
+            //extract data
             var year = record[0];
             var month = record[1];
             var monthlyTotal = Double.parseDouble(record[2]);
@@ -149,7 +157,6 @@ public class RainfallVisualiser extends Application {
             }
 
             //fill in data according to month
-
             switch (month) {
                 case "1":
                     series1.getData().add(new XYChart.Data<>(year, monthlyTotal));
@@ -189,14 +196,9 @@ public class RainfallVisualiser extends Application {
                     continue;
             }
 
-
-
-
-
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName(month);
-            series.getData().add(new XYChart.Data<>(year, monthlyTotal));
-
+            //XYChart.Series<String, Number> series = new XYChart.Series<>();
+            //series.setName(month);
+            //series.getData().add(new XYChart.Data<>(year, monthlyTotal));
             //barChart.getData().add(series);
 
         }
@@ -216,6 +218,7 @@ public class RainfallVisualiser extends Application {
         //barChart.setMinWidth(0);
         //barChart.setMaxWidth(1500);
 
+        barChart.setBarGap(1);
 
         //Group root = new Group(barChart);
 
@@ -231,8 +234,8 @@ public class RainfallVisualiser extends Application {
         BorderPane root = new BorderPane(canvas);
         root.setStyle("-fx-border-width: 4px; -fx-border-color: #444");
         Scene scene = new Scene(root);
-
          */
+
         stage.setScene(scene);
         stage.setTitle("Rainfall Visualiser");
         stage.show();
@@ -240,20 +243,43 @@ public class RainfallVisualiser extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.print("Enter path: ");
-        // var path = TextIO.getln();
 
-        var path = "src/data/MountSheridanStationCNS.csv";
+        var flag = true;
 
-        //use static methods to analyse rainfall data
-        TextIO.readFile(path);
-        String savePath = RainfallAnalyser.generateSavePath(path);
-        RainfallAnalyser.analyseDataset(savePath);
+        while (flag) {
 
-        //input generated rainfall data
-        TextIO.readFile(savePath);
+            System.out.print("Enter file path (enter exit to stop): ");
+            Scanner sc = new Scanner(System.in);
+            String path = sc.nextLine();
+            //path = TextIO.getln();
+            //String path = null;
+            //try {
 
-        launch();
+
+            //} catch (Exception e){
+                //System.out.println("errorrr");
+            //}
+
+            if (path.equals("exit")) {
+                flag = false;
+                exit();
+            } else {
+                //var path = "src/data/MountSheridanStationCNS.csv";
+                //use static methods to analyse rainfall data
+                var processPath = RainfallAnalyser.processData(path);
+
+                if (processPath == null || processPath.equals("fail")) {
+                    continue;
+                }
+
+                TextIO.readFile(processPath);
+
+                System.out.println("Statistical charts have been generated!");
+                launch();
+                flag = false;
+
+            }
+        }
     }
 
 } // end SimpleGraphicsStarter

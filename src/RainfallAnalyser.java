@@ -16,23 +16,38 @@ public class RainfallAnalyser {
         }
     }
 
-    static String generateSavePath(String path) {
+    //generic function to handle file open exceptions
+    static String processData(String path) {
+        String savePath = null;
+        try {
+            TextIO.readFile(path);
+            savePath = RainfallAnalyser.generateSavePath(path);
+            String flag = RainfallAnalyser.analyseDataset(savePath);
+            if (flag.equals("empty") || flag.equals("corrupt")) {
+                return "fail";
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("ERROR: failed to process file");
+        }
+        return savePath;
+    }
+
+    private static String generateSavePath(String path) {
         var pathElements = path.trim().split("/");
         var filenameElements = pathElements[2].trim().split("\\.");
         return String.format("%s/%s_analysed.%s", pathElements[0],
                 filenameElements[0], filenameElements[1]);
     }
 
-    static void analyseDataset(String savePath) {
+    private static String analyseDataset(String savePath) {
         var header = extractRecord(); // ignore header record
 
-
         if (header == null) {
+            //throw new IllegalArgumentException("ERROR: file is empty");
             System.out.println("ERROR: file is empty");
-            return;
+            return "empty";
         }
-
-
 
         // setup accumulation
         var totalRainfall = 0.0;
@@ -60,7 +75,7 @@ public class RainfallAnalyser {
 
             if ((month < 1 || month > 12) || (day < 1 || day > 31)) {
                 System.out.println("ERROR: failed to process file");
-                return;
+                return "corrupt";
             }
 
             if (month != currentMonth) {
@@ -88,6 +103,7 @@ public class RainfallAnalyser {
             // last month is incomplete - save record
             writeRecord(totalRainfall, minRainfall, maxRainfall, currentMonth, currentYear);
         }
+        return "success";
     }
 
     private static void writeRecord(double totalRainfall, double minRainfall, double maxRainfall, int currentMonth, int year) {
