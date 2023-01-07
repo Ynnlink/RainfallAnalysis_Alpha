@@ -16,19 +16,23 @@ public class RainfallAnalyser {
         }
     }
 
-    private static String generateSavePath(String path) {
+    static String generateSavePath(String path) {
         var pathElements = path.trim().split("/");
         var filenameElements = pathElements[2].trim().split("\\.");
         return String.format("%s/%s_analysed.%s", pathElements[0],
                 filenameElements[0], filenameElements[1]);
     }
 
-    private static void analyseDataset(String savePath) {
+    static void analyseDataset(String savePath) {
         var header = extractRecord(); // ignore header record
+
+
         if (header == null) {
             System.out.println("ERROR: file is empty");
             return;
         }
+
+
 
         // setup accumulation
         var totalRainfall = 0.0;

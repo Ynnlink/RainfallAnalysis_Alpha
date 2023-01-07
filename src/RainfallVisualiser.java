@@ -1,13 +1,21 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.Group;
 import javafx.stage.Stage;
 import textio.TextIO;
+
+import java.util.Arrays;
 
 /**
  * This file can be used to draw a chart that effectively represents rainfall data.  Just fill in
@@ -19,6 +27,7 @@ public class RainfallVisualiser extends Application {
      * Draws a picture.  The parameters width and height give the size
      * of the drawing area, in pixels.
      */
+
     public void drawPicture(GraphicsContext g, int width, int height) {
         // draw the x-axis and y-axis
         var margin = 20;
@@ -56,7 +65,10 @@ public class RainfallVisualiser extends Application {
             currentX += columnWidth;
         }
     } // end drawPicture()
+
+
     //------ Implementation details: DO NOT EDIT THIS ------
+    /*
     public void start(Stage stage) {
         int width = 218 * 6 + 40;
         int height = 500;
@@ -70,13 +82,90 @@ public class RainfallVisualiser extends Application {
         stage.show();
         stage.setResizable(false);
     }
+     */
+
+
+
+    public void start(Stage stage) {
+
+        TextIO.getln(); // ignore the header line
+
+
+
+        //Defining the axes
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setCategories(FXCollections.<String>
+                observableArrayList(Arrays.asList("Speed", "User rating", "Milage", "Safety")));
+        xAxis.setLabel("category");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("score");
+
+        //Creating the Bar chart
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Comparison between various cars");
+
+        //Prepare XYChart.Series objects by setting data
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        series1.setName("Fiat");
+        series1.getData().add(new XYChart.Data<>("Speed", 1.0));
+        series1.getData().add(new XYChart.Data<>("User rating", 3.0));
+        series1.getData().add(new XYChart.Data<>("Milage", 5.0));
+        series1.getData().add(new XYChart.Data<>("Safety", 5.0));
+
+        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+        series2.setName("Audi");
+        series2.getData().add(new XYChart.Data<>("Speed", 5.0));
+        series2.getData().add(new XYChart.Data<>("User rating", 6.0));
+        series2.getData().add(new XYChart.Data<>("Milage", 10.0));
+        series2.getData().add(new XYChart.Data<>("Safety", 4.0));
+
+        XYChart.Series<String, Number> series3 = new XYChart.Series<>();
+        series3.setName("Ford");
+        series3.getData().add(new XYChart.Data<>("Speed", 4.0));
+        series3.getData().add(new XYChart.Data<>("User rating", 2.0));
+        series3.getData().add(new XYChart.Data<>("Milage", 3.0));
+        series3.getData().add(new XYChart.Data<>("Safety", 6.0));
+
+        //Setting the data to bar chart
+        barChart.getData().addAll(series1, series2, series3);
+
+        Group root = new Group(barChart);
+
+        //Creating a scene object
+        Scene scene = new Scene(root, 218 * 6 + 40, 500);
+
+
+        /*
+        int width = 218 * 6 + 40;
+        int height = 500;
+        Canvas canvas = new Canvas(width, height);
+        drawPicture(canvas.getGraphicsContext2D(), width, height);
+        BorderPane root = new BorderPane(canvas);
+        root.setStyle("-fx-border-width: 4px; -fx-border-color: #444");
+        Scene scene = new Scene(root);
+
+         */
+        stage.setScene(scene);
+        stage.setTitle("Rainfall Visualiser");
+        stage.show();
+        stage.setResizable(false);
+    }
 
     public static void main(String[] args) {
         System.out.print("Enter path: ");
-        //var path = TextIO.getln();
-        //var path = "src/main/resources/MountSheridanStationCNS.csv";
-        var path = "src/MountSheridanStationCNS_analysed.csv";
+        // var path = TextIO.getln();
+
+        var path = "src/data/MountSheridanStationCNS.csv";
+
+        //use static methods to analyse rainfall data
         TextIO.readFile(path);
+        String savePath = RainfallAnalyser.generateSavePath(path);
+        RainfallAnalyser.analyseDataset(savePath);
+
+        //input generated rainfall data
+        TextIO.readFile(savePath);
+
         launch();
     }
 
