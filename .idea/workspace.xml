@@ -78,7 +78,7 @@
       <workItem from="1673010708939" duration="1000" />
       <workItem from="1673011156058" duration="7189000" />
       <workItem from="1673056679775" duration="980000" />
-      <workItem from="1673058023483" duration="4359000" />
+      <workItem from="1673058023483" duration="5514000" />
     </task>
     <task id="LOCAL-00001" summary="initial">
       <created>1673009384325</created>
@@ -108,7 +108,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673060469289</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="bar chart">
+      <created>1673062641383</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1673062641383</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,7 +131,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RainfallVisualiser.java</url>
-          <line>133</line>
+          <line>160</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>

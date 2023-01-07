@@ -93,52 +93,103 @@ public class RainfallVisualiser extends Application {
 
         var year = new ArrayList<String>();
 
-        //Defining the axes
+        //defining the axes
         CategoryAxis xAxis = new CategoryAxis();
-        //empty categories
+        //x-axis with empty categories
         xAxis.setCategories(FXCollections.observableArrayList());
         xAxis.setLabel("year");
-
+        //y-axis using mm as unit
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Units = mm");
 
-        //Creating the Bar chart
+        //creating the Bar chart
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
         barChart.setTitle("Rainfall Visualiser");
+
+        //creating data series using months
+        //Jan Feb Mar Apr May June July Aug Sept Oct Nov Dec
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        series1.setName("Jan");
+        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+        series2.setName("Feb");
+        XYChart.Series<String, Number> series3 = new XYChart.Series<>();
+        series3.setName("Mar");
+        XYChart.Series<String, Number> series4 = new XYChart.Series<>();
+        series4.setName("Apr");
+        XYChart.Series<String, Number> series5 = new XYChart.Series<>();
+        series5.setName("May");
+        XYChart.Series<String, Number> series6 = new XYChart.Series<>();
+        series6.setName("June");
+        XYChart.Series<String, Number> series7 = new XYChart.Series<>();
+        series7.setName("July");
+        XYChart.Series<String, Number> series8 = new XYChart.Series<>();
+        series8.setName("Aug");
+        XYChart.Series<String, Number> series9 = new XYChart.Series<>();
+        series9.setName("Sept");
+        XYChart.Series<String, Number> series10 = new XYChart.Series<>();
+        series10.setName("Oct");
+        XYChart.Series<String, Number> series11 = new XYChart.Series<>();
+        series11.setName("Nov");
+        XYChart.Series<String, Number> series12 = new XYChart.Series<>();
+        series12.setName("Dec");
+
 
         //generate bar chart using analysed data
         while (!TextIO.eof()) {
             var record = TextIO.getln().trim().split(",");
 
             //axis year
-
             if (!year.contains(record[0])) {
                 year.add(record[0]);
             }
 
             //axis data
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-
-
             var monthlyTotal = Double.parseDouble(record[2]);
 
-            series.setName(record[0]);
-            series.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
-
-            barChart.getData().add(series);
-
+            //fill in data according to month
+            switch (record[1]) {
+                case "1":
+                    series1.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "2":
+                    series2.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "3":
+                    series3.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "4":
+                    series4.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "5":
+                    series5.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "6":
+                    series6.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "7":
+                    series7.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "8":
+                    series8.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "9":
+                    series9.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "10":
+                    series10.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "11":
+                    series11.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+                case "12":
+                    series12.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
+            }
 
         }
+
+
 
         //fill in categories
         xAxis.setCategories(FXCollections.observableArrayList(year));
 
+        //fill in data
+        barChart.getData().addAll(series1,series2,series3,series4,series5,series6,series7,series8,series9,series10,series11,series12);
+
 
         //barChart.setBarGap(5);
-        //barChart.setCategoryGap(0);
+        barChart.setCategoryGap(20);
 
         //barChart.setMinWidth(0);
-        //barChart.setMaxWidth(1500);
+        barChart.setMaxWidth(1500);
 
 
         //Group root = new Group(barChart);
