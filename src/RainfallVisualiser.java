@@ -15,6 +15,7 @@ import javafx.scene.Group;
 import javafx.stage.Stage;
 import textio.TextIO;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -90,45 +91,54 @@ public class RainfallVisualiser extends Application {
 
         TextIO.getln(); // ignore the header line
 
-
+        var year = new ArrayList<String>();
 
         //Defining the axes
         CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setCategories(FXCollections.<String>
-                observableArrayList(Arrays.asList("Speed", "User rating", "Milage", "Safety")));
-        xAxis.setLabel("category");
+        //empty categories
+        xAxis.setCategories(FXCollections.observableArrayList());
+        xAxis.setLabel("year");
 
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("score");
+        yAxis.setLabel("Units = mm");
 
         //Creating the Bar chart
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setTitle("Comparison between various cars");
+        barChart.setTitle("Rainfall Visualiser");
 
-        //Prepare XYChart.Series objects by setting data
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-        series1.setName("Fiat");
-        series1.getData().add(new XYChart.Data<>("Speed", 1.0));
-        series1.getData().add(new XYChart.Data<>("User rating", 3.0));
-        series1.getData().add(new XYChart.Data<>("Milage", 5.0));
-        series1.getData().add(new XYChart.Data<>("Safety", 5.0));
+        //generate bar chart using analysed data
+        while (!TextIO.eof()) {
+            var record = TextIO.getln().trim().split(",");
 
-        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-        series2.setName("Audi");
-        series2.getData().add(new XYChart.Data<>("Speed", 5.0));
-        series2.getData().add(new XYChart.Data<>("User rating", 6.0));
-        series2.getData().add(new XYChart.Data<>("Milage", 10.0));
-        series2.getData().add(new XYChart.Data<>("Safety", 4.0));
+            //axis year
+            /*
+            if (!year.contains(record[0])) {
+                year.add(record[0]);
+            } else {
+                continue;
+            }
 
-        XYChart.Series<String, Number> series3 = new XYChart.Series<>();
-        series3.setName("Ford");
-        series3.getData().add(new XYChart.Data<>("Speed", 4.0));
-        series3.getData().add(new XYChart.Data<>("User rating", 2.0));
-        series3.getData().add(new XYChart.Data<>("Milage", 3.0));
-        series3.getData().add(new XYChart.Data<>("Safety", 6.0));
+             */
 
-        //Setting the data to bar chart
-        barChart.getData().addAll(series1, series2, series3);
+            //axis data
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+            var monthlyTotal = Double.parseDouble(record[2]);
+
+            series.setName(record[0]);
+            series.getData().add(new XYChart.Data<>(record[1], monthlyTotal));
+
+            barChart.getData().add(series);
+
+
+        }
+
+        //fill in categories
+        xAxis.setCategories(FXCollections.observableArrayList(year));
+
+
+
+
 
         Group root = new Group(barChart);
 
