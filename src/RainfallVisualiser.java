@@ -111,22 +111,19 @@ public class RainfallVisualiser extends Application {
             var record = TextIO.getln().trim().split(",");
 
             //axis year
-            /*
+
             if (!year.contains(record[0])) {
                 year.add(record[0]);
-            } else {
-                continue;
             }
-
-             */
 
             //axis data
             XYChart.Series<String, Number> series = new XYChart.Series<>();
 
+
             var monthlyTotal = Double.parseDouble(record[2]);
 
             series.setName(record[0]);
-            series.getData().add(new XYChart.Data<>(record[1], monthlyTotal));
+            series.getData().add(new XYChart.Data<>(record[0], monthlyTotal));
 
             barChart.getData().add(series);
 
@@ -137,13 +134,17 @@ public class RainfallVisualiser extends Application {
         xAxis.setCategories(FXCollections.observableArrayList(year));
 
 
+        //barChart.setBarGap(5);
+        //barChart.setCategoryGap(0);
+
+        //barChart.setMinWidth(0);
+        //barChart.setMaxWidth(1500);
 
 
-
-        Group root = new Group(barChart);
+        //Group root = new Group(barChart);
 
         //Creating a scene object
-        Scene scene = new Scene(root, 218 * 6 + 40, 500);
+        Scene scene = new Scene(barChart, 1500, 500);
 
 
         /*

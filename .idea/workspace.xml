@@ -78,7 +78,7 @@
       <workItem from="1673010708939" duration="1000" />
       <workItem from="1673011156058" duration="7189000" />
       <workItem from="1673056679775" duration="980000" />
-      <workItem from="1673058023483" duration="2099000" />
+      <workItem from="1673058023483" duration="4359000" />
     </task>
     <task id="LOCAL-00001" summary="initial">
       <created>1673009384325</created>
@@ -101,7 +101,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673058306776</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="bar chart">
+      <created>1673060469289</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1673060469289</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -111,6 +118,17 @@
     <MESSAGE value="initial" />
     <MESSAGE value="bar chart" />
     <option name="LAST_COMMIT_MESSAGE" value="bar chart" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RainfallVisualiser.java</url>
+          <line>133</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
