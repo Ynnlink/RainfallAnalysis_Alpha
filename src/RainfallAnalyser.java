@@ -32,7 +32,7 @@ public class RainfallAnalyser {
                 return processCondition;
             }
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             System.out.println("ERROR: failed to process file");
         }
         return savePath;
