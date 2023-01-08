@@ -4,27 +4,32 @@ public class RainfallAnalyser {
     public static void main(String[] args) {
         System.out.print("Enter path name: ");
         var path = TextIO.getln();
-
         try {
             TextIO.readFile(path);
             String savePath = generateSavePath(path);
             analyseDataset(savePath);
-
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("ERROR: failed to process file");
         }
     }
 
-    //generic function to handle file open exceptions
+    /**
+     * generic function to handle file open failures
+     * @param path
+     * @return
+     * failure conditions if fail to process file
+     * filepath if successfully process file
+     */
     static String processData(String path) {
         String savePath = null;
+        String processCondition;
         try {
             TextIO.readFile(path);
             savePath = RainfallAnalyser.generateSavePath(path);
-            String flag = RainfallAnalyser.analyseDataset(savePath);
-            if (flag.equals("empty") || flag.equals("corrupt")) {
-                return "fail";
+            processCondition = RainfallAnalyser.analyseDataset(savePath);
+            if (!processCondition.equals("success")) {
+                return processCondition;
             }
         } catch (Exception e) {
             //e.printStackTrace();
@@ -40,11 +45,18 @@ public class RainfallAnalyser {
                 filenameElements[0], filenameElements[1]);
     }
 
+    /**
+     *
+     * @param savePath
+     * @return
+     * corrupt: corrupt csv file
+     * empty: file is empty
+     * file path: success condition
+     */
     private static String analyseDataset(String savePath) {
         var header = extractRecord(); // ignore header record
 
         if (header == null) {
-            //throw new IllegalArgumentException("ERROR: file is empty");
             System.out.println("ERROR: file is empty");
             return "empty";
         }
@@ -74,12 +86,11 @@ public class RainfallAnalyser {
             var rainfall = record.length < 6 ? 0 : Double.parseDouble(record[5]);
 
             if ((month < 1 || month > 12) || (day < 1 || day > 31)) {
-                System.out.println("ERROR: failed to process file");
+                System.out.println("ERROR: File is corrupted");
                 return "corrupt";
             }
 
             if (month != currentMonth) {
-
                 // new month detected - save record and reset accumulation
                 writeRecord(totalRainfall, minRainfall, maxRainfall, currentMonth, currentYear == 0 ? year : currentYear);
 

@@ -1,14 +1,10 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import textio.TextIO;
 
@@ -27,6 +23,7 @@ public class RainfallVisualiser extends Application {
      * Draws a picture.  The parameters width and height give the size
      * of the drawing area, in pixels.
      */
+    /* original function
 
     public void drawPicture(GraphicsContext g, int width, int height) {
         // draw the x-axis and y-axis
@@ -66,9 +63,7 @@ public class RainfallVisualiser extends Application {
         }
     } // end drawPicture()
 
-
     //------ Implementation details: DO NOT EDIT THIS ------
-    /*
     public void start(Stage stage) {
         int width = 218 * 6 + 40;
         int height = 500;
@@ -84,10 +79,7 @@ public class RainfallVisualiser extends Application {
     }
      */
 
-
-
     public void start(Stage stage) {
-
         TextIO.getln(); // ignore the header line
 
         var years = new ArrayList<String>();
@@ -158,128 +150,64 @@ public class RainfallVisualiser extends Application {
 
             //fill in data according to month
             switch (month) {
-                case "1":
-                    series1.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "2":
-                    series2.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "3":
-                    series3.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "4":
-                    series4.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "5":
-                    series5.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "6":
-                    series6.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "7":
-                    series7.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "8":
-                    series8.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "9":
-                    series9.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "10":
-                    series10.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "11":
-                    series11.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
-                case "12":
-                    series12.getData().add(new XYChart.Data<>(year, monthlyTotal));
-                    continue;
+                case "1" -> series1.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "2" -> series2.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "3" -> series3.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "4" -> series4.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "5" -> series5.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "6" -> series6.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "7" -> series7.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "8" -> series8.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "9" -> series9.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "10" -> series10.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "11" -> series11.getData().add(new XYChart.Data<>(year, monthlyTotal));
+                case "12" -> series12.getData().add(new XYChart.Data<>(year, monthlyTotal));
             }
-
-            //XYChart.Series<String, Number> series = new XYChart.Series<>();
-            //series.setName(month);
-            //series.getData().add(new XYChart.Data<>(year, monthlyTotal));
-            //barChart.getData().add(series);
-
         }
-
-
 
         //fill in categories
         xAxis.setCategories(FXCollections.observableArrayList(years));
 
         //fill in data
-        barChart.getData().addAll(series1,series2,series3,series4,series5,series6,series7,series8,series9,series10,series11,series12);
+        var data = FXCollections.observableArrayList(series1,series2,series3,series4,series5,series6,series7,series8,series9,series10,series11,series12);
+        barChart.setData(data);
 
-
-        //barChart.setBarGap(5);
-        //barChart.setCategoryGap(20);
-
-        //barChart.setMinWidth(0);
-        //barChart.setMaxWidth(1500);
-
-        barChart.setBarGap(1);
-
-        //Group root = new Group(barChart);
+        //set bar gap
+        barChart.setBarGap(0.5);
 
         //Creating a scene object
         Scene scene = new Scene(barChart, 1500, 500);
-
-
-        /*
-        int width = 218 * 6 + 40;
-        int height = 500;
-        Canvas canvas = new Canvas(width, height);
-        drawPicture(canvas.getGraphicsContext2D(), width, height);
-        BorderPane root = new BorderPane(canvas);
-        root.setStyle("-fx-border-width: 4px; -fx-border-color: #444");
-        Scene scene = new Scene(root);
-         */
-
         stage.setScene(scene);
         stage.setTitle("Rainfall Visualiser");
         stage.show();
         stage.setResizable(false);
     }
 
+
     public static void main(String[] args) {
-
+        //sentinel
         var flag = true;
-
         while (flag) {
-
             System.out.print("Enter file path (enter exit to stop): ");
+            //receive file path
             Scanner sc = new Scanner(System.in);
             String path = sc.nextLine();
-            //path = TextIO.getln();
-            //String path = null;
-            //try {
-
-
-            //} catch (Exception e){
-                //System.out.println("errorrr");
-            //}
 
             if (path.equals("exit")) {
                 flag = false;
                 exit();
             } else {
-                //var path = "src/data/MountSheridanStationCNS.csv";
                 //use static methods to analyse rainfall data
                 var processPath = RainfallAnalyser.processData(path);
-
-                if (processPath == null || processPath.equals("fail")) {
+                //failure conditions
+                if (processPath == null || processPath.equals("corrupt") || processPath.equals("empty")) {
                     continue;
                 }
-
                 TextIO.readFile(processPath);
-
                 System.out.println("Statistical charts have been generated!");
                 launch();
                 flag = false;
-
             }
         }
     }
-
 } // end SimpleGraphicsStarter
